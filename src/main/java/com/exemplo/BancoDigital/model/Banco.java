@@ -8,15 +8,15 @@ import java.util.List;
 public class Banco {
 
     private String nome;
-    private int agencia;
+    private int banco;
     private Endereco endereco;
     private double caixa;
     private List<Cliente> clientes;
     private int numDeContas;
 
-    public Banco(String nome, int agencia, Endereco endereco, double caixa, int numDeContas) {
+    public Banco(String nome, int banco, Endereco endereco, double caixa) {
         this.nome = nome;
-        this.agencia = agencia;
+        this.banco = banco;
         this.endereco = endereco;
         this.caixa = caixa;
         this.clientes = new ArrayList<>();
@@ -27,7 +27,7 @@ public class Banco {
     public String toString() {
         return "Banco{" +
                 "nome='" + nome + '\'' +
-                ", agencia=" + agencia +
+                ", banco=" + banco +
                 ", endereco=" + endereco +
                 ", caixa=" + caixa +
                 '}';
@@ -35,5 +35,9 @@ public class Banco {
 
     public double getCaixa() {
         return caixa;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 }

@@ -7,8 +7,6 @@ public class Cliente {
     private String nome;
     private Endereco endereco;
     private int cpf;
-
-
     private Conta conta;
 
     public Cliente(String nome, Endereco endereco, int cpf, Conta conta) {
@@ -23,9 +21,7 @@ public class Cliente {
         return conta;
     }
 
-
-
-
-
-
+    public String getNome() {
+        return nome;
+    }
 }

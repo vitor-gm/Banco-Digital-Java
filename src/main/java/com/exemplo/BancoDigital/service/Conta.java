@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Conta {
+public abstract class Conta implements ServicoConta {
 
     private int numero;
     private int agencia;
@@ -18,64 +18,99 @@ public class Conta {
     private Banco banco;
     private List<Extrato> extrato;
 
+    public Conta(int numero, int agencia, double saldo, int senha, double divida, Banco banco) {
+        this.numero = numero;
+        this.agencia = agencia;
+        this.saldo = saldo;
+        this.senha = senha;
+        this.banco = banco;
+        this.extrato = new ArrayList<>();
+        carregarSaldoEDivida();
+        contas++;
+    }
+
+    @Override
+    public abstract void emprestimo(double valorEmprestimo, int senha);
 
     public static int getContas() {
 
         return contas;
     }
 
-    public Conta(int numero, int agencia, double saldo, int senha, double divida, Banco banco) {
-        this.numero = numero;
-        this.agencia = agencia;
-        this.saldo = saldo;
-        this.senha = senha;
-        this.divida = divida;
-        this.banco = banco;
-        this.extrato = new ArrayList<>();
-        carregarSaldoEDivida();
-
-        contas++;
-    }
-
-    public double sacar(double valorSaque) {
-        if (this.saldo < valorSaque) {
-            System.out.println("Saldo insuficiente!");
-        } else {
-            this.saldo -= valorSaque;
+    public void sacar(double valorSaque, int senha) {
+        if(this.senha == senha) {
+            if(this.saldo < valorSaque) {
+                System.out.println("Saldo insuficiente!");
+            }else {
+                this.saldo -= valorSaque;
+            }
+            this.extrato.add(new Extrato("Saque", valorSaque, this.saldo, this.divida));
+            salvarSaldoEDivida();
+        }else {
+            System.out.println("Senha incorreta!");
         }
-        this.extrato.add(new Extrato("Saque", this.saldo, valorSaque));
-        salvarSaldoEDivida();
-        return valorSaque;
-
     }
 
     public void depositar(double valorDeposito) {
-        this.saldo += valorDeposito;
-        this.extrato.add(new Extrato("Depósito", this.saldo, valorDeposito));
+
+        if(this.divida > 0) {
+            double desconto = valorDeposito * 0.20;
+            if(desconto >= this.divida) {
+                valorDeposito -= this.divida;
+                banco.depositar(this.divida);
+                this.saldo += valorDeposito;
+                this.divida = 0;
+            }else {
+                this.divida -= desconto;
+                this.saldo += (valorDeposito - desconto);
+                banco.depositar(desconto);
+            }
+
+        }else {
+            this.saldo += valorDeposito;
+        }
+        this.extrato.add(new Extrato("Depósito", valorDeposito, this.saldo, this.divida));
         salvarSaldoEDivida();
-
-
     }
 
     public void transferir(Conta contaDestino, double valorTransferencia, int senha) {
 
         if (this.senha == senha) {
-            this.sacar(valorTransferencia);
+            this.sacar(valorTransferencia, senha);
             contaDestino.depositar(valorTransferencia);
         } else {
             System.out.println("Senha inválida!");
         }
-        this.extrato.add(new Extrato("Transferência", this.saldo, valorTransferencia));
+        this.extrato.add(new Extrato("Transferência", this.saldo, valorTransferencia, this.divida));
         salvarSaldoEDivida();
 
+    }
 
+    public void contaExtrato() {
+        System.out.println("========");
+        System.out.println("Extrato");
+        System.out.println("========");
+        this.extrato.forEach(n -> {
+            System.out.println("Operação: " + n.getOperacao());
+            System.out.println("Valor: " + n.getValor());
+            System.out.println("Saldo: " + n.getSaldo());
+            System.out.println("Divida: " + n.getDivida());
+            System.out.println(" ");
+        });
 
     }
 
-    protected void contaExtrato() {
-
+    public void pagarDivida(double valorDoBanco) {
+        banco.depositar(valorDoBanco);
     }
 
+    public void somarDivida(double emprestimo) {
+        this.divida += emprestimo;
+    }
+
+    public void depositarEmprestimo(double valorEmprestimo) {
+        this.saldo += valorEmprestimo;
+    }
 
     public void salvarSaldoEDivida() {
         String arquivo = "dadosConta" + this.numero + ".txt";
@@ -86,6 +121,8 @@ public class Conta {
                     .append(e.getValor())
                     .append(",")
                     .append(e.getSaldo())
+                    .append(",")
+                    .append(e.getDivida())
                     .append(";");
 
         }
@@ -110,8 +147,8 @@ public class Conta {
                     String[] extratosSerializados = partes[2].split(";");
                     for (String ex : extratosSerializados) {
                         String[] atributosExtrato = ex.split(",");
-                        if (atributosExtrato.length == 3) {
-                            this.extrato.add(new Extrato(atributosExtrato[0], Double.parseDouble(atributosExtrato[1]), Double.parseDouble(atributosExtrato[2])));
+                        if (atributosExtrato.length == 4) {
+                            this.extrato.add(new Extrato(atributosExtrato[0], Double.parseDouble(atributosExtrato[1]), Double.parseDouble(atributosExtrato[2]), Double.parseDouble(atributosExtrato[3])));
                         }
 
 
@@ -124,11 +161,38 @@ public class Conta {
     }
 
 
-    public List<Extrato> getExtrato() {
-        return extrato;
-    }
 
     public double getSaldo() {
         return saldo;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public int getAgencia() {
+        return agencia;
+    }
+
+    public int getSenha() {
+        return senha;
+    }
+
+    public double getDivida() {
+        return divida;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public List<Extrato> getExtrato() {
+        return extrato;
+    }
+
+    public void setDivida(double divida) {
+        this.divida = divida;
+    }
+
+
 }

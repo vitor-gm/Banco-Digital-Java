@@ -1,7 +1,6 @@
 package main.java.com.poo.BancoDigital.model;
 
 import main.java.com.poo.BancoDigital.service.Conta;
-import main.java.com.poo.BancoDigital.service.ServicoConta;
 
 public class ContaDiamond extends Conta {
 

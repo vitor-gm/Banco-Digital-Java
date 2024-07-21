@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Conta implements ServicoConta {
+public abstract class Conta {
 
     private int numero;
     private int agencia;
@@ -29,7 +29,7 @@ public abstract class Conta implements ServicoConta {
         contas++;
     }
 
-    @Override
+
     public abstract void emprestimo(double valorEmprestimo, int senha);
 
     public static int getContas() {

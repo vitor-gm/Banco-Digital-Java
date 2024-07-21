@@ -1,9 +1,7 @@
 package main.java.com.poo.BancoDigital.model;
 
 import main.java.com.poo.BancoDigital.service.Conta;
-import main.java.com.poo.BancoDigital.service.ServicoConta;
-
-public class ContaGold extends Conta implements ServicoConta {
+public class ContaGold extends Conta {
 
     public ContaGold(int numero, int agencia, double saldo, int senha, double divida, Banco banco) {
         super(numero, agencia, saldo, senha, divida, banco);

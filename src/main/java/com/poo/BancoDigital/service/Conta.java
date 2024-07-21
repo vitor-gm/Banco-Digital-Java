@@ -1,7 +1,7 @@
-package main.java.com.exemplo.BancoDigital.service;
+package main.java.com.poo.BancoDigital.service;
 
-import main.java.com.exemplo.BancoDigital.model.Banco;
-import main.java.com.exemplo.BancoDigital.model.Extrato;
+import main.java.com.poo.BancoDigital.model.Banco;
+import main.java.com.poo.BancoDigital.model.Extrato;
 
 import java.io.*;
 import java.util.ArrayList;

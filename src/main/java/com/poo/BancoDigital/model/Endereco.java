@@ -1,4 +1,4 @@
-package main.java.com.exemplo.BancoDigital.model;
+package main.java.com.poo.BancoDigital.model;
 
 public class Endereco {
 

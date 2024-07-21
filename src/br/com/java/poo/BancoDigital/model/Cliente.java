@@ -1,6 +1,6 @@
-package main.java.com.poo.BancoDigital.model;
+package br.com.java.poo.BancoDigital.model;
 
-import main.java.com.poo.BancoDigital.service.Conta;
+import br.com.java.poo.BancoDigital.service.Conta;
 
 public class Cliente {
 

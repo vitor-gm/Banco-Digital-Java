@@ -1,9 +1,6 @@
-package main.java.com.poo.BancoDigital.Main;
-
-
-import main.java.com.poo.BancoDigital.model.Banco;
-import main.java.com.poo.BancoDigital.model.Cliente;
-import main.java.com.poo.BancoDigital.model.Endereco;
+import br.com.java.poo.BancoDigital.model.Banco;
+import br.com.java.poo.BancoDigital.model.Cliente;
+import br.com.java.poo.BancoDigital.model.Endereco;
 
 
 public class Main {
